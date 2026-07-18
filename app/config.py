@@ -24,3 +24,8 @@ DEBUG = os.getenv(
     "DEBUG",
     "False"
 ) == "True"
+
+OLLAMA_MODEL = os.getenv(
+    "OLLAMA_MODEL",
+    "llama3.2:3b"
+)

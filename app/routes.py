@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from .models import TextRequest
+from .models import TextRequest, SummaryResponse
 from .services import summarise_text
 
 
@@ -14,7 +14,7 @@ def health_check():
     }
 
 
-@router.post("/summarise")
+@router.post("/summarise", response_model=SummaryResponse)
 def summarise(request: TextRequest):
 
     summary = summarise_text(request.text)

@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 
-from .config import APP_NAME, APP_VERSION
+from .config import APP_NAME, APP_DESC, APP_VERSION
 from .routes import router
 
 
 app = FastAPI(
     title=APP_NAME,
+    description=APP_DESC,
     version=APP_VERSION
 )
 

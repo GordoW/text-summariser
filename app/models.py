@@ -7,3 +7,8 @@ class TextRequest(BaseModel):
         max_length=5000,
         description="Text to summarise"
     )
+
+class SummaryResponse(BaseModel):
+    summary: str
+    original_word_count: int
+    summary_word_count: int
