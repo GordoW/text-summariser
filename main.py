@@ -1,10 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from config import APP_NAME, APP_DESC, APP_VERSION
 
 app = FastAPI(
-    title="Text summariser API",
-    description="An API for summarising text",
-    version="1.0.0"
+    title=APP_NAME,
+    description=APP_DESC,
+    version=APP_VERSION
 )
 
 class TextRequest(BaseModel):
@@ -33,11 +34,6 @@ def home():
 
 @app.post("/summarise")
 def summarise(request: TextRequest):
-    if not request.text.strip():
-        raise HTTPException(
-            status_code=400,
-            detail="Text cannot be empty"
-        )
 
     summary = summarise_text(request.text)
 
@@ -47,3 +43,7 @@ def summarise(request: TextRequest):
         "original_word_count": len(request.text.split()),
         "summary_word_count": len(summary.split())
     }
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
