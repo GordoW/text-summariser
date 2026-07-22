@@ -1,12 +1,16 @@
 import ollama
+import logging
 
 from ..config import OLLAMA_MODEL
 from ..exceptions import LLMServiceError
 
+logger = logging.getLogger(__name__)
+
 def generate_summary(text: str) -> str:
-    """
-    Generates a summary using Ollama
-    """
+    logger.info(
+        "Sending request to Ollama model: %s",
+        OLLAMA_MODEL
+    )
     try:
         response = ollama.chat(
             model=OLLAMA_MODEL,
@@ -29,10 +33,17 @@ def generate_summary(text: str) -> str:
                 }
             ]
         )
+        summary = response["message"]["content"]
+        logger.info(
+            "Ollama repsonse received"
+        )
 
-        return response["message"]["content"]
+        return summary
     
     except Exception as e:
+        logger.exception(
+            "Ollama request failed"
+        )
         raise LLMServiceError(
             "Unable to generate summary"
         ) from e
