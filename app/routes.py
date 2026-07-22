@@ -2,6 +2,8 @@ from fastapi import APIRouter
 
 from .models import TextRequest, SummaryResponse
 from .services import summarise_text
+from .llm.client import check_health
+from .config import OLLAMA_MODEL
 
 
 router = APIRouter()
@@ -11,6 +13,16 @@ router = APIRouter()
 def health_check():
     return {
         "status": "healthy"
+    }
+
+@router.get("/health/ai")
+def ai_health():
+    healthy = check_health()
+
+    return {
+        "status": "healthy" if healthy else "unavailable",
+        "provider": "Ollama",
+        "model": OLLAMA_MODEL
     }
 
 

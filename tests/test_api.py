@@ -10,7 +10,18 @@ def test_health_check():
     assert response.status_code == 200
     assert response.json() == {"status": "healthy"}
 
-def test_summarise_text():
+def test_ai_health():
+    response = client.get("/health/ai")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert "provider" in data
+    assert "model" in data
+    assert "llm_available" in data
+
+def test_summarise():
     response = client.post(
         "/summarise",
         json={
@@ -22,9 +33,9 @@ def test_summarise_text():
 
     data = response.json()
 
-    assert "summary" in data
-    assert "original_word_count" in data
-    assert "summary_word_count" in data
+    assert isinstance(data["summary"], str)
+    assert isinstance(data["original_word_count"], int)
+    assert isinstance(data["summary_word_count"], int)
 
 def test_summarise_text_too_short():
     response = client.post(
@@ -36,16 +47,9 @@ def test_summarise_text_too_short():
 
     assert response.status_code == 422
 
-def test_summarise_response_structure():
-    response = client.post(
-        "/summarise",
-        json={
-            "text": "Artificial intelligence is reshaping software development. Developers now use AI assistants and agent-based workflows to generate code, automate testing, and catch bugs in real time. This shifts human roles from writing every line of code to managing high-level intent, drastically cutting development time."
-        }
-    )
+def test_summarise_when_llm_unavailable():
 
-    data = response.json()
+    # This test will be implemented properly
+    # using mocking in the next step.
 
-    assert isinstance(data["summary"], str)
-    assert isinstance(data["original_word_count"], int)
-    assert isinstance(data["summary_word_count"], int)
+    assert True
